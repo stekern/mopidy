@@ -123,6 +123,9 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         logger.debug(
             'Closed WebSocket connection from %s',
             self.request.remote_ip)
+        
+    def on_pong(self, data):
+        logger.debug('Received a pong')
 
     def on_message(self, message):
         if not message:
