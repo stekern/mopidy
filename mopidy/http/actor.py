@@ -102,7 +102,7 @@ class HttpServer(threading.Thread):
         self.io_loop = None
 
     def run(self):
-        self.app = tornado.web.Application(self._get_request_handlers())
+        self.app = tornado.web.Application(self._get_request_handlers(), websocket_ping_interval=30)
         self.server = tornado.httpserver.HTTPServer(self.app)
         self.server.add_sockets(self.sockets)
 
