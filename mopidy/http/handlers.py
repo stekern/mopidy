@@ -125,7 +125,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             self.request.remote_ip)
         
     def on_pong(self, data):
-        logger.info('Received a pong from %s', self.request.remote_ip)
+        logger.debug('Received a pong from %s', self.request.remote_ip)
 
     def on_message(self, message):
         if not message:
