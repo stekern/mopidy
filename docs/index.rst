@@ -10,7 +10,7 @@ of MPD and web clients.
 
 **Stream music from the cloud**
 
-Vanilla Mopidy only plays music from your :ref:`local disk <ext-local>` and
+Vanilla Mopidy only plays music from your :ref:`local disk <ext-file>` and
 :ref:`radio streams <ext-stream>`. Through :ref:`extensions <ext-backends>`,
 Mopidy can play music from cloud services like Spotify, SoundCloud, and Google
 Play Music. With Mopidy's extension support, backends for new music sources can
@@ -60,8 +60,7 @@ To get started with Mopidy, start by reading :ref:`installation`.
 
 If you get stuck, you can get help at the `Mopidy discussion forum
 <https://discourse.mopidy.com/>`_. We also hang around at IRC on the
-``#mopidy`` channel at `irc.freenode.net <http://freenode.net/>`_. The IRC
-channel has `public searchable logs <https://botbot.me/freenode/mopidy/>`_.
+``#mopidy`` channel at `irc.freenode.net <http://freenode.net/>`_.
 
 If you stumble into a bug or have a feature request, please create an issue in
 the `issue tracker <https://github.com/mopidy/mopidy/issues>`_. If you're
@@ -92,7 +91,6 @@ announcements related to Mopidy and Mopidy extensions.
     :caption: Extensions
     :maxdepth: 2
 
-    ext/local
     ext/file
     ext/m3u
     ext/stream
@@ -121,8 +119,9 @@ announcements related to Mopidy and Mopidy extensions.
 
     authors
     sponsors
-    changelog
     versioning
+    changelog
+    history/index
 
 
 .. toctree::

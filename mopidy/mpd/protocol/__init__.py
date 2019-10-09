@@ -5,15 +5,16 @@ This is partly based upon the `MPD protocol documentation
 <http://www.musicpd.org/doc/protocol/>`_, which is a useful resource, but it is
 rather incomplete with regards to data formats, both for requests and
 responses. Thus, we have had to talk a great deal with the the original `MPD
-server <http://mpd.wikia.com/>`_ using telnet to get the details we need to
+server <https://mpd.fandom.com/>`_ using telnet to get the details we need to
 implement our own MPD server which is compatible with the numerous existing
-`MPD clients <http://mpd.wikia.com/wiki/Clients>`_.
+`MPD clients <https://mpd.fandom.com/wiki/Clients>`_.
 """
 
 from __future__ import absolute_import, unicode_literals
 
 import inspect
 
+from mopidy import compat
 from mopidy.mpd import exceptions
 
 #: The MPD protocol uses UTF-8 for encoding all data.
@@ -38,7 +39,7 @@ def load_protocol_modules():
 
 
 def INT(value):  # noqa: N802
-    r"""Converts a value that matches [+-]?\d+ into and integer."""
+    r"""Converts a value that matches [+-]?\d+ into an integer."""
     if value is None:
         raise ValueError('None is not a valid integer')
     # TODO: check for whitespace via value != value.strip()?
@@ -52,6 +53,23 @@ def UINT(value):  # noqa: N802
     if not value.isdigit():
         raise ValueError('Only positive numbers are allowed')
     return int(value)
+
+
+def FLOAT(value):  # noqa: N802
+    r"""Converts a value that matches [+-]\d+(.\d+)? into a float."""
+    if value is None:
+        raise ValueError('None is not a valid float')
+    return float(value)
+
+
+def UFLOAT(value):  # noqa: N802
+    r"""Converts a value that matches \d+(.\d+)? into a float."""
+    if value is None:
+        raise ValueError('None is not a valid float')
+    value = float(value)
+    if value < 0:
+        raise ValueError('Only positive numbers are allowed')
+    return value
 
 
 def BOOL(value):  # noqa: N802
@@ -121,24 +139,33 @@ class Commands(object):
             if name in self.handlers:
                 raise ValueError('%s already registered' % name)
 
-            args, varargs, keywords, defaults = inspect.getargspec(func)
-            defaults = dict(zip(args[-len(defaults or []):], defaults or []))
+            if compat.PY2:
+                spec = inspect.getargspec(func)
+            else:
+                spec = inspect.getfullargspec(func)
+            defaults = dict(
+                zip(spec.args[-len(spec.defaults or []):], spec.defaults or [])
+            )
 
-            if not args and not varargs:
+            if not spec.args and not spec.varargs:
                 raise TypeError('Handler must accept at least one argument.')
 
-            if len(args) > 1 and varargs:
+            if len(spec.args) > 1 and spec.varargs:
                 raise TypeError(
                     '*args may not be combined with regular arguments')
 
-            if not set(validators.keys()).issubset(args):
+            if not set(validators.keys()).issubset(spec.args):
                 raise TypeError('Validator for non-existent arg passed')
 
-            if keywords:
-                raise TypeError('**kwargs are not permitted')
+            if compat.PY2:
+                if spec.keywords:
+                    raise TypeError('Keyword arguments are not permitted')
+            else:
+                if spec.varkw or spec.kwonlyargs:
+                    raise TypeError('Keyword arguments are not permitted')
 
             def validate(*args, **kwargs):
-                if varargs:
+                if spec.varargs:
                     return func(*args, **kwargs)
 
                 try:

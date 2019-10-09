@@ -39,8 +39,8 @@ You should instead run the following to inspect the service's configuration::
 
     sudo mopidyctl config
 
-The same applies to scanning your local music collection. Where you'll normally
-run::
+The same applies to scanning your local music collection with Mopidy-Local.
+Where you'll normallyrun::
 
     mopidy local scan
 
@@ -101,7 +101,7 @@ When using PulseAudio, you will typically have a PulseAudio server run by your
 main user. Since Mopidy is running as its own user, it can't access this server
 directly. Running PulseAudio as a system-wide daemon is discouraged by upstream
 (see `here
-<http://www.freedesktop.org/wiki/Software/PulseAudio/Documentation/User/WhatIsWrongWithSystemWide/>`_
+<https://www.freedesktop.org/wiki/Software/PulseAudio/Documentation/User/WhatIsWrongWithSystemWide/>`_
 for details). Rather you can configure PulseAudio and Mopidy so Mopidy sends
 the sound to the PulseAudio server already running as your main user.
 

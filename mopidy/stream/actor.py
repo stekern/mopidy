@@ -27,7 +27,7 @@ class StreamBackend(pykka.ThreadingActor, backend.Backend):
 
         self._session = http.get_requests_session(
             proxy_config=config['proxy'],
-            user_agent='%s/%s' % (
+            user_agent='{}/{}'.format(
                 stream.Extension.dist_name, stream.Extension.version))
 
         blacklist = config['stream']['metadata_blacklist']
@@ -127,10 +127,12 @@ def _unwrap_stream(uri, timeout, scanner, requests_session):
             scan_result = None
 
         if scan_result is not None:
-            if scan_result.playable or (
+            has_interesting_mime = (
+                scan_result.mime is not None and
                 not scan_result.mime.startswith('text/') and
                 not scan_result.mime.startswith('application/')
-            ):
+            )
+            if scan_result.playable or has_interesting_mime:
                 logger.debug(
                     'Unwrapped potential %s stream: %s', scan_result.mime, uri)
                 return uri, scan_result
@@ -158,6 +160,7 @@ def _unwrap_stream(uri, timeout, scanner, requests_session):
             return uri, None
 
         # TODO Test streams and return first that seems to be playable
+        new_uri = uris[0].decode('utf-8')
         logger.debug(
-            'Parsed playlist (%s) and found new URI: %s', uri, uris[0])
-        uri = uris[0]
+            'Parsed playlist (%s) and found new URI: %s', uri, new_uri)
+        uri = urllib.parse.urljoin(uri, new_uri)

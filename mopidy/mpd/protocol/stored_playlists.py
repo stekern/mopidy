@@ -41,7 +41,8 @@ def listplaylist(context, name):
         file: relative/path/to/file3.mp3
     """
     playlist = _get_playlist(context, name)
-    return ['file: %s' % t.uri for t in playlist.tracks]
+    uris = [translator.uri_to_mpd_format(t.uri) for t in playlist.tracks]
+    return ['file: %s' % u for u in uris]
 
 
 @protocol.commands.add('listplaylistinfo')
@@ -190,7 +191,7 @@ def _create_playlist(context, name, tracks):
     """
     Creates new playlist using backend appropriate for the given tracks
     """
-    uri_schemes = set([urllib.parse.urlparse(t.uri).scheme for t in tracks])
+    uri_schemes = {urllib.parse.urlparse(t.uri).scheme for t in tracks}
     for scheme in uri_schemes:
         new_playlist = context.core.playlists.create(name, scheme).get()
         if new_playlist is None:

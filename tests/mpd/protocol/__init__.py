@@ -22,6 +22,7 @@ class MockConnection(mock.Mock):
         self.response = []
 
     def queue_send(self, data):
+        data = data.decode('utf-8')
         lines = (line for line in data.split('\n') if line)
         self.response.extend(lines)
 
@@ -68,7 +69,7 @@ class BaseTestCase(unittest.TestCase):
 
     def send_request(self, request):
         self.connection.response = []
-        request = '%s\n' % request.encode('utf-8')
+        request = ('%s\n' % request).encode('utf-8')
         self.session.on_receive({'received': request})
         return self.connection.response
 
@@ -78,20 +79,20 @@ class BaseTestCase(unittest.TestCase):
     def assertInResponse(self, value):  # noqa: N802
         self.assertIn(
             value, self.connection.response,
-            'Did not find %s in %s' % (
+            'Did not find {} in {}'.format(
                 repr(value), repr(self.connection.response)))
 
     def assertOnceInResponse(self, value):  # noqa: N802
         matched = len([r for r in self.connection.response if r == value])
         self.assertEqual(
             1, matched,
-            'Expected to find %s once in %s' % (
+            'Expected to find {} once in {}'.format(
                 repr(value), repr(self.connection.response)))
 
     def assertNotInResponse(self, value):  # noqa: N802
         self.assertNotIn(
             value, self.connection.response,
-            'Found %s in %s' % (
+            'Found {} in {}'.format(
                 repr(value), repr(self.connection.response)))
 
     def assertEqualResponse(self, value):  # noqa: N802

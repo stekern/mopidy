@@ -18,7 +18,6 @@ from mopidy.core.playback import PlaybackController
 from mopidy.core.playlists import PlaylistsController
 from mopidy.core.tracklist import TracklistController
 from mopidy.internal import path, storage, validation, versioning
-from mopidy.internal.deprecation import deprecated_property
 from mopidy.internal.models import CoreState
 
 
@@ -71,21 +70,9 @@ class Core(
         uri_schemes = itertools.chain(*results)
         return sorted(uri_schemes)
 
-    uri_schemes = deprecated_property(get_uri_schemes)
-    """
-    .. deprecated:: 1.0
-        Use :meth:`get_uri_schemes` instead.
-    """
-
     def get_version(self):
         """Get version of the Mopidy core API"""
         return versioning.get_version()
-
-    version = deprecated_property(get_version)
-    """
-    .. deprecated:: 1.0
-        Use :meth:`get_version` instead.
-    """
 
     def reached_end_of_stream(self):
         self.playback._on_end_of_stream()
@@ -107,8 +94,8 @@ class Core(
         # We ignore cases when target state is set as this is buffering
         # updates (at least for now) and we need to get #234 fixed...
         if (new_state == PlaybackState.PAUSED and not target_state and
-                self.playback.state != PlaybackState.PAUSED):
-            self.playback.state = new_state
+                self.playback.get_state() != PlaybackState.PAUSED):
+            self.playback.set_state(new_state)
             self.playback._trigger_track_playback_paused()
 
     def playlists_loaded(self):
@@ -131,13 +118,15 @@ class Core(
         if not tags:
             return
 
-        # TODO: this limits us to only streams that set organization, this is
-        # a hack to make sure we don't emit stream title changes for plain
-        # tracks. We need a better way to decide if something is a stream.
-        if 'title' in tags and tags['title'] and 'organization' in tags:
+        # TODO: this is a hack to make sure we don't emit stream title changes
+        # for plain tracks. We need a better way to decide if something is a
+        # stream.
+        if 'title' in tags and tags['title']:
             title = tags['title'][0]
-            self.playback._stream_title = title
-            CoreListener.send('stream_title_changed', title=title)
+            current_track = self.playback.get_current_track()
+            if current_track is not None and current_track.name != title:
+                self.playback._stream_title = title
+                CoreListener.send('stream_title_changed', title=title)
 
     def setup(self):
         """Do not call this function. It is for internal use at startup."""

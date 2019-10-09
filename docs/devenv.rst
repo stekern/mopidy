@@ -54,7 +54,7 @@ your regular Mopidy install, which you set up in the first step, is unaffected
 by your hacking and will always be working.
 
 Most of us use the `virtualenvwrapper
-<https://virtualenvwrapper.readthedocs.org/>`_ to ease working with
+<https://virtualenvwrapper.readthedocs.io/>`_ to ease working with
 virtualenvs, so that's what we'll be using for the examples here. First,
 install and setup virtualenvwrapper as described in their docs.
 
@@ -180,7 +180,6 @@ the Mopidy source code:
 
     [mopidy.ext]
     http = mopidy.http:Extension
-    local = mopidy.local:Extension
     mpd = mopidy.mpd:Extension
     softwaremixer = mopidy.softwaremixer:Extension
     stream = mopidy.stream:Extension
@@ -243,10 +242,10 @@ You need to know at least one command; the one that runs all the tests::
 
     tox
 
-This will run exactly the same tests as `Travis CI
-<https://travis-ci.org/mopidy/mopidy>`_ runs for all our branches and pull
+This will run exactly the same tests as `CircleCI
+<https://circleci.com/gh/mopidy/mopidy>`_ runs for all our branches and pull
 requests. If this command turns green, you can be quite confident that your
-pull request will get the green flag from Travis as well, which is a
+pull request will get the green flag from CircleCI as well, which is a
 requirement for it to be merged.
 
 As this is the ultimate test command, it's also the one taking the most time to
@@ -262,14 +261,14 @@ environments using the ``-e`` option, e.g. to run just unit tests::
 
     tox -e py27
 
-To learn more, see the `tox documentation <http://tox.readthedocs.org/>`_ .
+To learn more, see the `tox documentation <https://tox.readthedocs.io/>`_ .
 
 
 Running unit tests
 ------------------
 
-Under the hood, ``tox -e py27`` will use `pytest <http://pytest.org/>`_ as the
-test runner. We can also use it directly to run all tests::
+Under the hood, ``tox -e py27`` will use `pytest <https://docs.pytest.org/>`_
+as the test runner. We can also use it directly to run all tests::
 
     pytest
 
@@ -300,7 +299,7 @@ the given module, ``mopidy`` in this example, are covered by the test suite::
 .. note::
 
     Up to date test coverage statistics can also be viewed online at
-    `coveralls.io <https://coveralls.io/github/mopidy/mopidy>`_.
+    `Codecov <https://codecov.io/gh/mopidy/mopidy>`_.
 
 If we want to speed up the test suite, we can even get a list of the ten
 slowest tests::
@@ -314,16 +313,16 @@ development can be very useful.
 Continuous integration
 ----------------------
 
-Mopidy uses the free service `Travis CI <https://travis-ci.org/mopidy/mopidy>`_
+Mopidy uses the free service `CircleCI`_
 for automatically running the test suite when code is pushed to GitHub. This
 works both for the main Mopidy repo, but also for any forks. This way, any
-contributions to Mopidy through GitHub will automatically be tested by Travis
-CI, and the build status will be visible in the GitHub pull request interface,
+contributions to Mopidy through GitHub will automatically be tested by CircleCI,
+and the build status will be visible in the GitHub pull request interface,
 making it easier to evaluate the quality of pull requests.
 
-For each successful build, Travis submits code coverage data to `coveralls.io
-<https://coveralls.io/github/mopidy/mopidy>`_. If you're out of work, coveralls might
-help you find areas in the code which could need better test coverage.
+For each successful build, CircleCI submits code coverage data to `Codecov`_.
+If you're out of work, Codecov might help you find areas in the code which
+could need better test coverage.
 
 
 .. _code-linting:
@@ -335,10 +334,10 @@ We're quite pedantic about :ref:`codestyle` and try hard to keep the Mopidy
 code base a very clean and nice place to work in.
 
 Luckily, you can get very far by using the `flake8
-<http://flake8.readthedocs.org/>`_ linter to check your code for issues before
+<http://flake8.readthedocs.io/>`_ linter to check your code for issues before
 submitting a pull request. Mopidy passes all of flake8's checks, with only a
 very few exceptions configured in :file:`setup.cfg`. You can either run the
-``flake8`` tox environment, like Travis CI will do on your pull request::
+``flake8`` tox environment, like CircleCI will do on your pull request::
 
     tox -e flake8
 
@@ -362,8 +361,8 @@ If successful, the command will not print anything at all.
 Writing documentation
 =====================
 
-To write documentation, we use `Sphinx <http://sphinx-doc.org/>`_. See their
-site for lots of documentation on how to use Sphinx.
+To write documentation, we use `Sphinx <http://www.sphinx-doc.org/>`_. See
+their site for lots of documentation on how to use Sphinx.
 
 .. note::
 
@@ -509,7 +508,7 @@ For clarity, we can rename the ``origin`` remote to ``upstream``::
     upstream        https://github.com/mopidy/mopidy.git (push)
 
 If you haven't already, `fork the repository
-<https://help.github.com/articles/fork-a-repo/>`_ to your own GitHub account.
+<https://help.github.com/en/articles/fork-a-repo>`_ to your own GitHub account.
 
 Then, add the new fork as a remote to your local clone::
 
@@ -553,17 +552,16 @@ When everything is done and committed, push the branch to your fork on GitHub::
 
 Go to the repository on GitHub where you want the change merged, in this case
 https://github.com/mopidy/mopidy, and `create a pull request
-<https://help.github.com/articles/creating-a-pull-request/>`_.
+<https://help.github.com/en/articles/creating-a-pull-request>`_.
 
 
 Updating a pull request
 -----------------------
 
-When the pull request is created, `Travis CI
-<https://travis-ci.org/mopidy/mopidy>`__ will run all tests on it. If something
+When the pull request is created, `CircleCI`_ will run all tests on it. If something
 fails, you'll get notified by email. You might as well just fix the issues
-right away, as we won't merge a pull request without a green Travis build. See
-:ref:`running-tests` on how to run the same tests locally as Travis CI runs on
+right away, as we won't merge a pull request without a green CircleCI build. See
+:ref:`running-tests` on how to run the same tests locally as CircleCI runs on
 your pull request.
 
 When you've fixed the issues, you can update the pull request simply by pushing

@@ -23,12 +23,15 @@ setup(
     packages=find_packages(exclude=['tests', 'tests.*']),
     zip_safe=False,
     include_package_data=True,
-    python_requires='>= 2.7, < 3',
+    python_requires=(
+        '>= 2.7, '
+        '!= 3.0.*, != 3.1.*, != 3.2.*, != 3.3.*, != 3.4.*, != 3.5.*, != 3.6.*'
+    ),
     install_requires=[
-        'Pykka >= 1.1',
+        'Pykka >= 2.0',
         'requests >= 2.0',
         'setuptools',
-        'tornado >= 4.5, < 5',  # Tornado 5 requires Python >= 2.7.9
+        'tornado >= 5, < 6',  # Tornado 6 requires Python 3
     ],
     extras_require={'http': []},
     entry_points={
@@ -37,7 +40,6 @@ setup(
         ],
         'mopidy.ext': [
             'http = mopidy.http:Extension',
-            'local = mopidy.local:Extension',
             'file = mopidy.file:Extension',
             'm3u = mopidy.m3u:Extension',
             'mpd = mopidy.mpd:Extension',
@@ -53,6 +55,8 @@ setup(
         'Operating System :: MacOS :: MacOS X',
         'Operating System :: POSIX :: Linux',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.7',
         'Topic :: Multimedia :: Sound/Audio :: Players',
     ],
 )

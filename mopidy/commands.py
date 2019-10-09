@@ -20,6 +20,7 @@ logger = logging.getLogger(__name__)
 
 _default_config = []
 for base in GLib.get_system_config_dirs() + [GLib.get_user_config_dir()]:
+    base = base.encode('utf-8')
     _default_config.append(os.path.join(base, b'mopidy', b'mopidy.conf'))
 DEFAULT_CONFIG = b':'.join(_default_config)
 
@@ -267,11 +268,7 @@ class RootCommand(Command):
         self.add_argument(
             '-v', '--verbose',
             action='count', dest='verbosity_level', default=0,
-            help='more output (repeat up to 3 times for even more)')
-        self.add_argument(
-            '--save-debug-log',
-            action='store_true', dest='save_debug_log',
-            help='save debug log to "./mopidy.log"')
+            help='more output (repeat up to 4 times for even more)')
         self.add_argument(
             '--config',
             action='store', dest='config_files', type=config_files_type,

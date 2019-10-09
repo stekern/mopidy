@@ -54,17 +54,20 @@ To get started with Mopidy, check out
 - `Source code <https://github.com/mopidy/mopidy>`_
 - `Issue tracker <https://github.com/mopidy/mopidy/issues>`_
 - IRC: ``#mopidy`` at `irc.freenode.net <http://freenode.net/>`_
-- Announcement list: `mopidy@googlegroups.com <https://groups.google.com/forum/?fromgroups=#!forum/mopidy>`_
 - Twitter: `@mopidy <https://twitter.com/mopidy/>`_
 
 .. image:: https://img.shields.io/pypi/v/Mopidy.svg?style=flat
     :target: https://pypi.python.org/pypi/Mopidy/
     :alt: Latest PyPI version
 
-.. image:: https://img.shields.io/travis/mopidy/mopidy/develop.svg?style=flat
-    :target: https://travis-ci.org/mopidy/mopidy
-    :alt: Travis CI build status
+.. image:: https://img.shields.io/circleci/project/github/mopidy/mopidy/develop.svg
+    :target: https://circleci.com/gh/mopidy/mopidy
+    :alt: CircleCI build status
 
-.. image:: https://img.shields.io/coveralls/mopidy/mopidy/develop.svg?style=flat
-   :target: https://coveralls.io/r/mopidy/mopidy?branch=develop
+.. image:: https://img.shields.io/readthedocs/mopidy.svg
+   :target: https://docs.mopidy.com/
+   :alt: Read the Docs build status
+
+.. image:: https://img.shields.io/codecov/c/github/mopidy/mopidy/develop.svg
+   :target: https://codecov.io/gh/mopidy/mopidy
    :alt: Test coverage

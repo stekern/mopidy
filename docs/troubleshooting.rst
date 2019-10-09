@@ -18,7 +18,7 @@ Sharing config and log output
 =============================
 
 If you're getting help at IRC, we recommend that you use a pastebin, like
-`pastebin.com <http://pastebin.com/>`_ or `GitHub Gist
+`pastebin.com <https://pastebin.com/>`_ or `GitHub Gist
 <https://gist.github.com/>`_, to share your configuration and log output.
 Pasting more than a couple of lines on IRC is generally frowned upon. On the
 mailing list or when reporting an issue, somewhat longer text dumps are
@@ -48,14 +48,24 @@ your system.
 Debug logging
 =============
 
-If you run :option:`mopidy -v` or ``mopidy -vv`` or ``mopidy -vvv`` Mopidy will
-print more and more debug log to stdout. All three options will give you debug
-level output from Mopidy and extensions, while ``-vv`` and ``-vvv`` will give
-you more log output from their dependencies as well.
+If you run :option:`mopidy -v` or ``mopidy -vv``, ``mopidy -vvv``,
+or ``mopidy -vvvv`` Mopidy will print more and more debug log to stdout.
+All four options will give you debug level output from Mopidy and extensions,
+while ``-vv``, ``-vvv``, and ``-vvvv`` will give you more log output
+from their dependencies as well.
 
-If you run :option:`mopidy --save-debug-log`, it will save the log equivalent
-with ``-vvv`` to the file ``mopidy.log`` in the directory you ran the command
-from.
+To save a debug log to file for sharing with others, you can run
+``mopidy -vvvv | tee mopidy.log``.
+
+If you run Mopidy as a system service, adding arguments on the command line
+might be complicated. As an alternative, you can set the configuration
+:confval:`logging/verbosity` to ``4`` instead of passing ``-vvvv`` on the
+command line.
+
+If you run Mopidy as a system service and are using journald,
+like most modern Linux systems, you can view the Mopidy log by running
+``sudo journalctl -u mopidy``. To save the output to a file for sharing, run
+``sudo journalctl -u mopidy | tee mopidy.log``.
 
 If you want to reduce the logging for some component, see the
 docs for the :confval:`loglevels/*` config section.
@@ -79,7 +89,7 @@ Debugging GStreamer
 
 If you really want to dig in and debug GStreamer behaviour, then check out the
 `Debugging section
-<http://gstreamer.freedesktop.org/data/doc/gstreamer/head/manual/html/section-checklist-debug.html>`_
+<https://gstreamer.freedesktop.org/documentation/application-development/appendix/checklist-element.html?gi-language=python>`_
 of GStreamer's documentation for your options. Note that Mopidy does not
 support the GStreamer command line options, like ``--gst-debug-level=3``, but
 setting GStreamer environment variables, like :envvar:`GST_DEBUG`, works with

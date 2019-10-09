@@ -75,14 +75,14 @@ class HttpFrontend(pykka.ThreadingActor, CoreListener):
         self.server.stop()
 
     def on_event(self, name, **data):
-        on_event(name, **data)
+        on_event(name, self.server.io_loop, **data)
 
 
-def on_event(name, **data):
+def on_event(name, io_loop, **data):
     event = data
     event['event'] = name
     message = json.dumps(event, cls=models.ModelJSONEncoder)
-    handlers.WebSocketHandler.broadcast(message)
+    handlers.WebSocketHandler.broadcast(message, io_loop)
 
 
 class HttpServer(threading.Thread):
@@ -125,7 +125,7 @@ class HttpServer(threading.Thread):
         logger.debug(
             'HTTP routes from extensions: %s',
             formatting.indent('\n'.join(
-                '%r: %r' % (r[0], r[1]) for r in request_handlers)))
+                '{!r}: {!r}'.format(r[0], r[1]) for r in request_handlers)))
 
         return request_handlers
 
@@ -144,7 +144,7 @@ class HttpServer(threading.Thread):
             ))
             for handler in request_handlers:
                 handler = list(handler)
-                handler[0] = '/%s%s' % (app['name'], handler[0])
+                handler[0] = '/{}{}'.format(app['name'], handler[0])
                 result.append(tuple(handler))
             logger.debug('Loaded HTTP extension: %s', app['name'])
         return result
